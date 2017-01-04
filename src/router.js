@@ -10,25 +10,15 @@ const memoize = function(func, hasher) {
     };
 };
 
-const queryString = require('query-string');
+// const queryString = require('query-string');
 const uriTemplate = memoize(require('uri-templates'));
-const fetch = require('isomorphic-fetch');
 
 const componentMap = require('./componentMap');
 
 const config = require('../config.json');
 
 
-// endpoint: 'urlPattern'
-const apiRoutingTable = {
-    "/items": "/api/items{?page}",
-    "/feeds": "/api/feeds"
-    // {url:"/api/{lang}/v1/countries/{country_geoid}", endpoint:"geo/regions"},
-    // {url:"/api/{lang}/v1/locations{?type,q}", endpoint:"geo/search"}
-};
-
-// do not duplicate endpoint keys pls
-const navigationRoutingTable = {
+const routingTable = {
     "dummy": "/#",
     "/feed": "/feed"
     // {url:"/about-us", endpoint:"about-us"},
@@ -41,15 +31,12 @@ const navigationRoutingTable = {
     // {url:"/step/{step}/{segment}/{identifier}/{+path}", endpoint:"step/track/passthrough"}
 };
 
-const routingTable = Object.assign({}, apiRoutingTable, navigationRoutingTable);
-// and that is why we don't dupe endpoint keys ok thx
-
 const parametersByMatchingPatternWithUrl = memoize(
     (pattern, url) => uriTemplate(pattern).fromUri(url),
     (pattern, url) => [pattern, url]
 );
 
-const Router = {
+Router = {
     componentTypeForRoute: function componentTypeForRoute(route) {
         return componentMap(route.endpoint);
     },
@@ -80,19 +67,6 @@ const Router = {
 
     routeToUrl: function(endpoint, params) {
         return Router.urlForRoute(Router.route(endpoint, params));
-    },
-
-    apiUrl: function(endpt, params) {
-        return config.SITE_URL + Router.routeToUrl(endpt, params);
-    },
-
-    apiFetch: function(endpt, params) {
-        let fetchOpts = {};
-        if (params.cookie) {
-            fetchOpts['headers'] = {'Cookie': params.cookie};
-            delete params.cookie;
-        }
-        return fetch(Router.apiUrl(endpt, params), fetchOpts);
     },
 
     routeIsSuitableTargetForClientNavigation: function (route) {

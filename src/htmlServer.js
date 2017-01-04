@@ -7,9 +7,9 @@ const ReactDOM = require('react-dom/server');
 const { createStore, applyMiddleware } = require('redux');
 const thunk = require('redux-thunk').default;
 
-const componentMap = require('./componentMap');
+const Router = require('./router');
 const rootReducer = require('./reducers');
-const { doInitialActions, addFlashAndComponentName } = require('./actions');
+const actions = require('./actions');
 
 const App = require('../components/App');
 
@@ -42,7 +42,6 @@ function replace(str, replacements) {
 
 let page = fs.readFileSync(__dirname + '/../basic.html');
 let serveAsPage = function(markup, data, title) {
-    console.log('serveAsPage');
     return replace(page.toString(), {
         TITLE: title || 'Quoll',
         BODY: markup,
@@ -53,8 +52,9 @@ let serveAsPage = function(markup, data, title) {
 };
 
 let serveAComponent = function(req, res) {
+    let route = Router.route(req.originalUrl);
     if (!req.Component) {
-        req.Component = componentMap(req.originalUrl);
+        req.Component = Router.componentTypeForRoute(route);
         if (!req.Component) {
             res.status(404).end();
         }
@@ -62,6 +62,7 @@ let serveAComponent = function(req, res) {
 
     const store = createStore(
         rootReducer,
+        {currentRoute: route},
         applyMiddleware(thunk)
     );
     let flash = {error: req.flash('error'), tutorial: req.flash('tutorial')};
@@ -74,13 +75,12 @@ let serveAComponent = function(req, res) {
 
     if (initialActions) {
         store.dispatch(
-            doInitialActions(initialActions, {cookie: req.headers.cookie})
+            actions.doInitialActions(initialActions, {cookie: req.headers.cookie})
         ).then(function() {
-            store.dispatch(addFlashAndComponentName(flash, req.Component.displayName));
-            console.log('then clause after doInitialActions has been called');
+            store.dispatch(actions.addFlashAndComponentName(flash, req.Component.displayName));
             try {
                 res.end(serveAsPage(ReactDOM.renderToString(
-                    React.createElement(App, {store}, React.createElement(req.Component))
+                    React.createElement(App, {store})
                 ), store.getState()));
             } catch(err) {
                 // throw new Error(err);
@@ -94,9 +94,9 @@ let serveAComponent = function(req, res) {
             throw new Error(err);
         });
     } else {
-        store.dispatch(addFlashAndComponentName(flash, req.Component.displayName));
+        store.dispatch(actions.addFlashAndComponentName(flash, req.Component.displayName));
         res.end(serveAsPage(ReactDOM.renderToString(
-            React.createElement(App, {store}, React.createElement(req.Component))
+            React.createElement(App, {store})
         ), store.getState()));
     }
 };

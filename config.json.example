@@ -4,5 +4,7 @@
     "DB_HOST": "localhost",
     "DB_NAME": "quoll_dev",
 
-    "SESSION_SECRET": "overcome-with(grief"
+    "SESSION_SECRET": "overcome-with(grief",
+
+    "SITE_URL": "http://localhost:3000"
 }

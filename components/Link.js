@@ -3,7 +3,8 @@
 const React = require('react');
 const {connect} = require('react-redux');
 
-const Router = require('Router');
+const Router = require('../src/router');
+const { routeTo } = require('../src/actions');
 
 
 const Link = React.createClass({
@@ -14,10 +15,6 @@ const Link = React.createClass({
 
         cxOnNavigate: React.PropTypes.func.isRequired,
         currentRoute: React.PropTypes.object.isRequired,
-    },
-
-    getDefaultProps: function () {
-        return { values: {} };
     },
 
     navigateWithClick: function(e) {
@@ -77,6 +74,14 @@ const Link = React.createClass({
 module.exports = connect(
     (state) => { return {currentRoute: state.currentRoute} },
     (dispatch) => { return {
-        cxOnNavigate: (route) => {}
+        cxOnNavigate: (route) => {
+            var url = Router.urlForRoute(route); // no this.href() here?
+            if (window.history.pushState) {
+                window.history.pushState(route, "", url);
+                dispatch(actions.routeTo(route));
+            } else {
+                window.location = url;
+            }
+        }
     }}
 )(Link);

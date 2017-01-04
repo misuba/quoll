@@ -14,7 +14,7 @@ const actOn = (actionHooks, init) => {
         if (action.type in actionHooks) {
             let thediff = actionHooks[action.type];
             if (typeof thediff === 'function') {
-                return thediff(action, state);
+                return thediff.call(null, action, state);
             }
             return thediff;
         }
@@ -72,9 +72,9 @@ const perStateKey = {
         [actions.ITEM_PAGE_ERROR]: false
     }, false),
     items: actOn({
-        [actions.RECV_ITEM_PAGE]: (action, state) =>
-            (state.items ? state.items.concat(action.items) : action.items)
-    }, []),
+        [actions.RECV_ITEM_PAGE]: (action, state) => {
+            return (state.items ? state.items.concat(action.items) : action.items)
+    }}, []),
 
     loadingFeeds: actOn({
         [actions.READY_FETCH_FEEDS]: true,
@@ -82,7 +82,7 @@ const perStateKey = {
         [actions.FEED_LOAD_ERROR]: false
     }, false),
     feeds: actOn({
-        [actions.RECV_FEEDS]: (action) => action.feeds
+        [actions.RECV_FEEDS]: function(action, state) {return action.feeds;}
     }, [])
 };
 

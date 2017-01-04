@@ -5,7 +5,6 @@ const config = require('../config.json');
 const crypto = require('crypto');
 
 const passport = require('passport');
-console.log('user dot js', passport);
 
 
 const encodePassword = function(password, time) {
@@ -21,21 +20,21 @@ const validPassword = function(possiblePassword, user) {
 };
 
 const authAndHandleUser = function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      console.log('authHandler says no user', user);
-      return res.redirect('/login');
-    }
-    req.logIn(user, function(err) {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect('/feed');
-    });
-  })(req, res, next);
+    passport.authenticate('local', function(err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            console.log('authHandler says no user', user);
+            return res.redirect('/login');
+        }
+        req.logIn(user, function(err) {
+            if (err) {
+                return next(err);
+            }
+            return res.redirect('/feed');
+        });
+    })(req, res, next);
 };
 
 module.exports = {encodePassword, validPassword, authAndHandleUser};

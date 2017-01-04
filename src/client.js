@@ -16,15 +16,22 @@ if (initialData) {
 
     const React = require('react');
     const ReactDOM = require('react-dom');
-    const { Router, browserHistory } = require('react-router');
+    const { createStore, applyMiddleware } = require('redux');
+    const thunk = require('redux-thunk').default;
+
+    const rootReducer = require('./reducers');
+    const store = createStore(
+        rootReducer,
+        initialData,
+        applyMiddleware(thunk)
+    );
+
+    const App = require('../components/App');
 
     const domReady = require('domready');
 
-    // not proud of this, but we'll do it until a router is in place
-    const Component = require('./components/' + initialData.component);
-
     domReady(() => ReactDOM.render(
-        <Component {...initialData} />,
+        <App store={store} />,
         document.getElementById('bullseye')
     ))
 

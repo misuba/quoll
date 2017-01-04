@@ -20,6 +20,7 @@ const PageWrapper = function(props) {
             }
             {props.flash && <aside className="error">{props.flash.error}</aside>}
         </header>
+        {props.nav && <nav>{props.nav}</nav>}
         {props.children}
         <footer>
             FOOTER

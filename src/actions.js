@@ -1,6 +1,7 @@
-// const {dispatch} = require('react-redux');
+"use strict";
 
 const Router = require('./router');
+const { apiFetch } = require('./serverFetch');
 
 
 const actions = {
@@ -20,9 +21,8 @@ const actions = {
         (dispatch) =>
             Promise.all(actions.map(action => action(dispatch, options))),
 
-
-    routeTo: (dispatch, route) => {
-        let Compy = Router.componentForRoute(route);
+    routeTo: (route) => (dispatch) => {
+        let Compy = Router.componentTypeForRoute(route);
         if (Compy) {
             dispatch({type: actions.READY_ROUTE});
             if (Compy.initialActions) {
@@ -41,12 +41,14 @@ const actions = {
         }
     },
 
+    routeWithoutLoad: (route) => { return {type: actions.FINALIZE_ROUTE, route}; },
+
     getItemsPage: (page = 1, opts = {}) => (dispatch) => {
         opts.page = page;
         dispatch({type: actions.READY_ITEM_FETCH_PAGE});
-        return Router.apiFetch('/items', opts).then(
+        return apiFetch('/items', opts).then(
             response => response.json().then(items =>
-                dispatch({type: actions.RECV_ITEM_PAGE, items: JSON.parse(items)})
+                dispatch({ type: actions.RECV_ITEM_PAGE, items: JSON.parse(items) })
             ).catch(error =>
                 dispatch({type: actions.ITEM_PAGE_ERROR, error})
             )
@@ -57,7 +59,7 @@ const actions = {
 
     getUserFeeds: (opts) => (dispatch) => {
         dispatch({type: actions.READY_FETCH_FEEDS});
-        return Router.apiFetch('/feeds', opts).then(
+        return apiFetch('/feeds', opts).then(
             response => response.json().then(feeds =>
                 dispatch({type: actions.RECV_FEEDS, feeds: JSON.parse(feeds)})
             ).catch(error =>
