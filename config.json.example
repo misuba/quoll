@@ -1,0 +1,8 @@
+{
+    "DB_USER": "quoll",
+    "DB_PASSWORD": "quollin",
+    "DB_HOST": "localhost",
+    "DB_NAME": "quoll_dev",
+
+    "SESSION_SECRET": "overcome-with(grief"
+}

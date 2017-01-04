@@ -1,0 +1,8 @@
+.DS_Store
+.git
+config.json
+build/*
+doc
+node_modules
+npm-debug.log
+yarn.lock
