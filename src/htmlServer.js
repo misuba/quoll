@@ -73,28 +73,26 @@ let serveAComponent = function(req, res) {
     [(dispatch) => promise, (dispatch) => promise, ...]
      */
 
+    store.dispatch(actions.addFlashAndComponentName(flash, req.Component.displayName));
+    store.dispatch(actions.addUserInfo(req.user || {}));
     if (initialActions) {
         store.dispatch(
             actions.doInitialActions(initialActions, {cookie: req.headers.cookie})
         ).then(function() {
-            store.dispatch(actions.addFlashAndComponentName(flash, req.Component.displayName));
             try {
                 res.end(serveAsPage(ReactDOM.renderToString(
                     React.createElement(App, {store})
                 ), store.getState()));
             } catch(err) {
-                // throw new Error(err);
                 res.status(500).end(err.toString());
             }
         }).catch((err) => {
-            // console.log('caught error');
             // res.end(serveAsPage(ReactDOM.renderToString(
             //     React.createElement(App, {store}, React.createElement(req.Component))
             // ), store.getState()))
             throw new Error(err);
         });
     } else {
-        store.dispatch(actions.addFlashAndComponentName(flash, req.Component.displayName));
         res.end(serveAsPage(ReactDOM.renderToString(
             React.createElement(App, {store})
         ), store.getState()));

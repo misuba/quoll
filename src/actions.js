@@ -15,6 +15,7 @@ const actions = {
     RECV_FEEDS: 'RECV_FEEDS',
     FEED_LOAD_ERROR: 'FEED_LOAD_ERROR',
     ADD_FLASH_AND_COMPONENT_NAME: 'ADD_FLASH_AND_COMPONENT_NAME',
+    ADD_USER_INFO: 'ADD_USER_INFO',
 
 
     doInitialActions: (actions, options) =>
@@ -75,6 +76,16 @@ const actions = {
             type: actions.ADD_FLASH_AND_COMPONENT_NAME,
             flash,
             componentName
+        };
+    },
+
+    addUserInfo: (userObj) => {
+        let {username} = userObj;
+        return {
+            type: actions.ADD_USER_INFO,
+            user: {
+                username
+            }
         };
     }
 

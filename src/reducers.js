@@ -43,10 +43,6 @@ const serverLoadOnly = (state = null, action) => state;
 // we could do more to ensure one-time set, of course, but meh
 
 const perStateKey = {
-    user: serverLoadOnly, // FIXME FIXME FIXME
-    // okay but really how do we manage the user stuff?
-    // by seeing what actions we need, p much. TBD
-
     flash: serverLoadOnly,
     component: serverLoadOnly,
 
@@ -55,6 +51,10 @@ const perStateKey = {
             (action, state) => state.concat([action.type + action.error]),
         []
     ),
+
+    user: actOn({
+        [actions.ADD_USER_INFO]: (action) => action.user
+    }, {}),
 
     loadingRoute: actOn({
         [actions.READY_ROUTE]: true,

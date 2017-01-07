@@ -9,12 +9,11 @@ const {connect} = require('react-redux');
 const PageWrapper = function(props) {
     return <div className="top">
         <header>
-            {props.user
+            {props.user && Object.keys(props.user).length
                 ? <nav>
                     {props.user.username}
                     <span className="logout">(<a href="/logout">Logout</a>)</span>
                     <hr />
-                    {props.nav || null}
                 </nav>
                 : null /* <HCard /> */
             }
