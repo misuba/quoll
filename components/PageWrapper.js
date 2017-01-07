@@ -10,8 +10,8 @@ const PageWrapper = function(props) {
     return <div className="top">
         <header>
             {props.user && Object.keys(props.user).length
-                ? <nav>
-                    {props.user.username}
+                ? <nav className="user">
+                    {props.user.username}&nbsp;
                     <span className="logout">(<a href="/logout">Logout</a>)</span>
                     <hr />
                 </nav>

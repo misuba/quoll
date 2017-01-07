@@ -80,12 +80,13 @@ const actions = {
     },
 
     addUserInfo: (userObj) => {
-        let {username} = userObj;
+        let user = {};
+        if (Object.keys(userObj).length) {
+            user = {username: userObj.username};
+        }
         return {
             type: actions.ADD_USER_INFO,
-            user: {
-                username
-            }
+            user
         };
     }
 
