@@ -1,20 +1,15 @@
-"use strict";
-
-//const BlogTop = require('../components/BlogTop');
-const LoginPage = require('../components/LoginPage');
-const FeedReader = require('../components/FeedReader');
-//const Admin = require('../components/Admin');
-//const {BlogPostOr404} = require('../components/SinglePost');
-
-
-const mappy = {
+const componentNamesByEndpoint = {
     //'/': BlogTop,
-    '/login': LoginPage,
-    '/feed': FeedReader
+    '/login': 'LoginPage',
+    '/feed': 'FeedReader'
     //'/settings': Admin,
     //'/new': EditPost
 };
 
 module.exports = function componentMap(route) {
-    return mappy[route]; // || BlogPostOr404;
+    let compName = componentNamesByEndpoint[route];
+    if (compName) {
+        return require('../components/' + compName);
+    }
+    return null;
 }

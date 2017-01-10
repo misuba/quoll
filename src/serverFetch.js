@@ -1,6 +1,4 @@
-"use strict";
-
-const config = require('../config.json');
+const config = require('../clientConfig');
 
 const uriTemplate = require('uri-templates');
 const fetch = require('isomorphic-fetch');
@@ -17,7 +15,7 @@ const apiRoutingTable = {
 const ServerFetch = {
     apiUrl: function(endpoint, params) {
         let urlPattern = apiRoutingTable[endpoint];
-        return config.SITE_URL + uriTemplate(urlPattern).fillFromObject(params);
+        return config.DEV_BASE_URL + uriTemplate(urlPattern).fillFromObject(params);
     },
 
     apiFetch: function(endpt, params) {

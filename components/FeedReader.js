@@ -24,13 +24,22 @@ class FeedReader extends React.Component {
                     </ul>
                 </main>
             </PageWrapper>
-        )
+        );
     }
 
     renderNav() {
         return <ul>
             <li><a href="#">Settings</a></li>
-            <li><a href="#">Add Feed</a></li>
+            <li>
+                <button onClick={this.props.cxOnToggleAddFeeds}>
+                    {this.props.addingFeeds ? 'Cancel' : 'Add Feed'}
+                </button>
+                {this.props.addingFeeds && <form onSubmit={this.props.cxOnSubmitFeedsToAdd}>
+                    {this.props.sendingAddedFeeds
+                        ? <span>adding...</span>
+                        : <input type="text" name="feedUrl" defaultValue="" />}
+                </form>}
+            </li>
 
             <li><a href="#">Everything</a></li>
             {this.props.feeds && this.props.feeds.map((feed) =>
@@ -39,7 +48,7 @@ class FeedReader extends React.Component {
                     <span>({feed.newPosts})</span>
                 </li>
             )}
-        </ul>
+        </ul>;
     }
 }
 
@@ -53,7 +62,24 @@ const listStyle = {
     margin: 0
 };
 
-module.exports = connect((state) => {return {
-    items: state.items,
-    feeds: state.feeds
-}})(FeedReader);
+module.exports = connect(
+    (state) => {return {
+        items: state.items,
+        feeds: state.feeds,
+        addingFeeds: state.addingFeeds,
+        sendingAddedFeeds: state.sendingAddedFeeds
+    }},
+    (dispatch) => {
+        return {
+            cxOnToggleAddFeeds: () => {
+                dispatch(actions.toggleAddFeed());
+            },
+            cxOnSubmitFeedsToAdd: (evt) => {
+                evt.preventDefault();
+                dispatch(
+                    actions.sendSubscribeFeed(evt.nativeEvent.target)
+                )
+            }
+        };
+    }
+)(FeedReader);

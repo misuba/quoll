@@ -16,6 +16,10 @@ const actions = {
     FEED_LOAD_ERROR: 'FEED_LOAD_ERROR',
     ADD_FLASH_AND_COMPONENT_NAME: 'ADD_FLASH_AND_COMPONENT_NAME',
     ADD_USER_INFO: 'ADD_USER_INFO',
+    TOGGLE_ADD_FEED: 'TOGGLE_ADD_FEED',
+    READY_SUB_FEED: 'READY_SUB_FEED',
+    SUB_FEEDS_OK: 'SUB_FEEDS_OK',
+    SUB_FEEDS_ERR: 'SUB_FEEDS_ERR',
 
 
     doInitialActions: (actions, options) =>
@@ -88,8 +92,26 @@ const actions = {
             type: actions.ADD_USER_INFO,
             user
         };
+    },
+
+    toggleAddFeed: function() {
+        return {
+            type: actions.TOGGLE_ADD_FEED
+        };
+    },
+
+    sendSubscribeFeed: (form) => (dispatch) => {
+        dispatch({type: actions.READY_SUB_FEED});
+        let formData = new FormData(form);
+        return apiFetch('/feeds', {method: 'POST', body: formData}).then(
+            response => response.formData().then(() =>
+                dispatch({
+                    type: actions.SUB_FEEDS_OK,
+                    feed: formData.getAll('feedUrl')
+                })
+            ).catch((err) => dispatch({type: actions.SUB_FEEDS_ERR, error}))
+        ).catch(error =>
+            dispatch({type: actions.SUB_FEEDS_ERR, error})
+        );
     }
-
 };
-
-module.exports = actions;

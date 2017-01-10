@@ -15,8 +15,6 @@ const uriTemplate = memoize(require('uri-templates'));
 
 const componentMap = require('./componentMap');
 
-const config = require('../config.json');
-
 
 const routingTable = {
     "dummy": "/#",
@@ -36,7 +34,8 @@ const parametersByMatchingPatternWithUrl = memoize(
     (pattern, url) => [pattern, url]
 );
 
-Router = {
+var Router;
+module.exports = Router = {
     componentTypeForRoute: function componentTypeForRoute(route) {
         return componentMap(route.endpoint);
     },
@@ -73,5 +72,3 @@ Router = {
         return this.componentTypeForRoute(route) !== undefined;
     }
 };
-
-module.exports = Router;

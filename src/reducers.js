@@ -82,8 +82,18 @@ const perStateKey = {
         [actions.FEED_LOAD_ERROR]: false
     }, false),
     feeds: actOn({
-        [actions.RECV_FEEDS]: function(action, state) {return action.feeds;}
-    }, [])
+        [actions.RECV_FEEDS]: function(action, state) {return action.feeds;},
+        [actions.SUB_FEEDS_OK]: (action, state) => state.feeds.concat(action.feed)
+    }, []),
+
+    addingFeeds: actOn({
+        [actions.TOGGLE_ADD_FEED]: (a, state) => { return !state; }
+    }, false),
+    sendingAddedFeeds: actOn({
+        [actions.READY_SUB_FEED]: true,
+        [actions.SUB_FEEDS_OK]: false,
+        [actions.SUB_FEEDS_ERR]: false
+    }, false)
 };
 
 let initState = typeof window === 'undefined' ? {} : window.initialData;

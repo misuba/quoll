@@ -1,5 +1,3 @@
-"use strict";
-
 require('node-jsx').install();
 
 const http = require('http');
@@ -36,6 +34,9 @@ app.use(passport.session());
 if (__DEV__) {
     app.use(errorHandler());
 }
+
+
+app.use(express.static(__dirname + '/build'));
 
 
 const setupRoutes = require('./src/setup');

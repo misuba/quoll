@@ -1,9 +1,9 @@
-"use strict";
-
 const express = require('express');
 const router = express.Router();
 
 const db = require('./db');
+
+
 router.use((req, res, next) => {
     if (!db.users) {
         res.redirect('/setup');

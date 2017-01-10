@@ -1,8 +1,3 @@
-"use strict";
-
-require('babel-polyfill');
-
-
 if (initialData) {
     // Console shim
     if (!window.console) {
@@ -26,13 +21,29 @@ if (initialData) {
         applyMiddleware(thunk)
     );
 
+    if (window.history.replaceState) {
+        window.history.replaceState(
+            store.getState().currentRoute,
+            '',
+            document.location
+        );
+    }
+
+    window.addEventListener("popstate", (event) => {
+        // event.state will be undefined when some browsers fire this event
+        // on the initial page load:
+        if (event.state) {
+            store.dispatch(actions.routeWithoutLoad(event.state));
+        }
+    });
+
     const App = require('../components/App');
 
     const domReady = require('domready');
 
     domReady(() => ReactDOM.render(
-        <App store={store} />,
-        document.getElementById('bullseye')
-    ))
+        React.createElement(App, {store}),
+        document.querySelector('section.outerFrame')
+    ));
 
 }
