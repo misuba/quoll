@@ -13,12 +13,12 @@ routes.use((req, res, next) => {
     next();
 });
 
-let {attachComponent, serveAComponent} = require('./htmlServer');
+let {serveAComponent} = require('./htmlServer');
 
 
 const SetupOne = require('../components/SetupOne');
 
-routes.get('/', attachComponent(SetupOne), serveAComponent);
+routes.get('/', serveAComponent);
 
 routes.post('/', (req, res) => {
     if (req.body && req.body.username && req.body.password1 && req.body.password2

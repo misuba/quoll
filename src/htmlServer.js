@@ -14,13 +14,6 @@ const actions = require('./actions');
 const App = require('../components/App');
 
 
-function attachComponent(Which) {
-    return function(req, res, next) {
-        req.Component = Which;
-        next();
-    }
-}
-
 function escapeScriptTagData(str) {
     return replace(str, {
         '&': '\\u0026',
@@ -99,4 +92,4 @@ let serveAComponent = function(req, res) {
     }
 };
 
-module.exports = {attachComponent, serveAComponent};
+module.exports = {serveAComponent};
