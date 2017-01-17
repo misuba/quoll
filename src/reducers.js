@@ -46,9 +46,13 @@ const perStateKey = {
     flash: serverLoadOnly,
     component: serverLoadOnly,
 
-    errorMessages: actTheSameOn(
-        [actions.ROUTING_ERROR, actions.ITEM_PAGE_ERROR, actions.FEED_LOAD_ERROR],
-            (action, state) => state.concat([action.type + action.error]),
+    errorMessages: actTheSameOn([
+            actions.ROUTING_ERROR,
+            actions.ITEM_PAGE_ERROR,
+            actions.FEED_LOAD_ERROR,
+            actions.SUB_FEEDS_ERR
+        ],
+        (action, state) => state.concat([action.type + action.error]),
         []
     ),
 

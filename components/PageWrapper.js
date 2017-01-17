@@ -6,6 +6,8 @@ const {connect} = require('react-redux');
 
 const PageWrapper = function(props) {
     return <div className="top container">
+        {props.flash && props.flash.error && <div className="alert alert-warning">flasherr:{props.flash.error.toString()}</div>}
+        {(props.errorMessages.length>0) && <div className="alert alert-danger">errorMsgs:{props.errorMessages.toString()}</div>}
         <header className="row">
             {props.user && Object.keys(props.user).length
                 ? <nav className="user col">
@@ -30,7 +32,8 @@ const PageWrapper = function(props) {
 module.exports = connect(
     (state) => {return {
         user: state.user,
-        flash: state.flash
+        flash: state.flash,
+        errorMessages: state.errorMessages
     }},
     (dispatch) => {return {
         // who knows what for logins

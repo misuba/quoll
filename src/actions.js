@@ -109,7 +109,9 @@ const actions = {
                     type: actions.SUB_FEEDS_OK,
                     feed: formData.getAll('feedUrl')
                 })
-            ).catch((err) => dispatch({type: actions.SUB_FEEDS_ERR, error}))
+            ).catch(error =>
+                dispatch({type: actions.SUB_FEEDS_ERR, error})
+            )
         ).catch(error =>
             dispatch({type: actions.SUB_FEEDS_ERR, error})
         );
