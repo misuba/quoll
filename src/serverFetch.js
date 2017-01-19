@@ -21,8 +21,9 @@ const ServerFetch = {
     apiFetch: function(endpt, params) {
         let fetchOpts = {};
         let forwardedParams = Object.assign({}, params);
-        if (params.cookie) {
-            fetchOpts['headers'] = {'Cookie': params.cookie};
+        if (params.cookie || (document && document.cookie)) {
+            let cookie = typeof document !== 'undefined' ? document.cookie : params.cookie;
+            fetchOpts['headers'] = {'Cookie': cookie};
             delete forwardedParams.cookie;
         }
         return fetch(ServerFetch.apiUrl(endpt, forwardedParams), fetchOpts);

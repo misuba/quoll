@@ -1,5 +1,6 @@
 const componentNamesByEndpoint = {
     //'/': BlogTop,
+    '/setup': 'SetupOne',
     '/login': 'LoginPage',
     '/feed': 'FeedReader'
     //'/settings': Admin,

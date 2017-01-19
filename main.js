@@ -37,7 +37,8 @@ if (__DEV__) {
 
 
 app.use(express.static(__dirname + '/build'));
-
+app.use('/static', express.static(__dirname + '/static'));
+// why am i doing those differently? it is a mystery
 
 const setupRoutes = require('./src/setup');
 app.use('/setup', setupRoutes);

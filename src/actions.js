@@ -104,12 +104,14 @@ const actions = {
         dispatch({type: actions.READY_SUB_FEED});
         let formData = new FormData(form);
         return apiFetch('/feeds', {method: 'POST', body: formData}).then(
-            response => response.formData().then(() =>
+            response => response.json().then(() =>
                 dispatch({
                     type: actions.SUB_FEEDS_OK,
                     feed: formData.getAll('feedUrl')
                 })
-            ).catch((err) => dispatch({type: actions.SUB_FEEDS_ERR, error}))
+            ).catch(error =>
+                dispatch({type: actions.SUB_FEEDS_ERR, error})
+            )
         ).catch(error =>
             dispatch({type: actions.SUB_FEEDS_ERR, error})
         );

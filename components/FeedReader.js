@@ -18,7 +18,7 @@ class FeedReader extends React.Component {
     render() {
         return (
             <PageWrapper nav={this.renderNav()}>
-                <main style={outerStyle}>
+                <main className="col-md-9">
                     <ul style={listStyle}>
                         {this.props.items.map(item => <li key={item.id}><Item item={item} /></li>)}
                     </ul>
@@ -28,7 +28,7 @@ class FeedReader extends React.Component {
     }
 
     renderNav() {
-        return <ul>
+        return <ul style={listStyle}>
             <li><a href="#">Settings</a></li>
             <li>
                 <button onClick={this.props.cxOnToggleAddFeeds}>
@@ -52,14 +52,9 @@ class FeedReader extends React.Component {
     }
 }
 
-const outerStyle = {
-    margin: '10px auto',
-    width: 740
-};
 const listStyle = {
-    display: 'inline',
     listStyle: 'none',
-    margin: 0
+    paddingLeft: 0
 };
 
 module.exports = connect(
