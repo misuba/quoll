@@ -19,14 +19,15 @@ const ServerFetch = {
     },
 
     apiFetch: function(endpt, params) {
-        let fetchOpts = {};
-        let forwardedParams = Object.assign({}, params);
-        if (params.cookie || (document && document.cookie)) {
-            let cookie = typeof document !== 'undefined' ? document.cookie : params.cookie;
-            fetchOpts['headers'] = {'Cookie': cookie};
-            delete forwardedParams.cookie;
+        let fetchOpts = Object.assign({}, params);
+        if (typeof document !== 'undefined') {
+            fetchOpts['credentials'] = 'same-origin';
         }
-        return fetch(ServerFetch.apiUrl(endpt, forwardedParams), fetchOpts);
+        if (!!params.cookie) {
+            fetchOpts.headers = {'Cookie': params.cookie};
+        }
+        // console.log('apiFetch', fetchOpts);
+        return fetch(ServerFetch.apiUrl(endpt, params), fetchOpts);
     }
 };
 

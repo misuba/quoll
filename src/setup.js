@@ -3,7 +3,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const {encodePassword} = require('./user');
+const {encodePassword} = require('./passwords');
 const db = require('./db');
 
 const routes = require('express').Router();

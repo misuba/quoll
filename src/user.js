@@ -1,20 +1,25 @@
-const config = require('../config.json');
-
-const crypto = require('crypto');
-
-const passport = require('passport');
+const passport = require('./passport');
 
 
-const encodePassword = function(password, time) {
-    let hmac = crypto.createHmac('sha256', config.PW_SECRET || config.SESSION_SECRET);
-    hmac.update(password + time.toString());
-    return hmac.digest('hex');
-};
-
-const validPassword = function(possiblePassword, user) {
-    let hmac = crypto.createHmac('sha256', config.PW_SECRET || config.SESSION_SECRET);
-    hmac.update(possiblePassword + user.createdAt.toString());
-    return hmac.digest('hex') === user.passwordHash;
+const authAndHandleUserForAPI = function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (req.user) {
+            return next();
+        }
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            console.log('authHandlerForAPI says no user', user);
+            return res.status(403).json({error: 'Please log in to use this API endpoint.'});
+        }
+        req.logIn(user, function(err) {
+            if (err) {
+                return next(err);
+            }
+            return next();
+        });
+    })(req, res, next);
 };
 
 const authAndHandleUser = function(req, res, next) {
@@ -35,4 +40,4 @@ const authAndHandleUser = function(req, res, next) {
     })(req, res, next);
 };
 
-module.exports = {encodePassword, validPassword, authAndHandleUser};
+module.exports = {authAndHandleUser, authAndHandleUserForAPI};

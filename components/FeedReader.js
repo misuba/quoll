@@ -60,7 +60,7 @@ const listStyle = {
 module.exports = connect(
     (state) => {return {
         items: state.items,
-        feeds: state.feeds,
+        feeds: state.feeds || [], //FIXME
         addingFeeds: state.addingFeeds,
         sendingAddedFeeds: state.sendingAddedFeeds
     }},

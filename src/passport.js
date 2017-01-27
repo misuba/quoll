@@ -3,7 +3,7 @@ const db = require('./db');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-const {validPassword} = require('./user');
+const {validPassword} = require('./passwords');
 
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => {
